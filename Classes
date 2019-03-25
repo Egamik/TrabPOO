@@ -1,0 +1,679 @@
+import java.util.*;
+
+public class ContaCorrente extends Conta{
+
+private int saldo;
+private boolean status;
+private double limCE;
+private ArrayList<Movimentacao> mov;
+Scanner input = new Scanner(System.in);
+
+
+  public ContaCorrente(int limiteSaque, int num, int saldo, boolean status, double limCE, Agencia ag, Cliente cliente) {
+    super(limiteSaque, num, ag, cliente);
+    this.saldo = saldo;
+    this.status = status;
+    this.limCE = limCE;
+    this.mov = new ArrayList<Movimentacao>();
+  }
+
+
+
+//Adiciona movimento a conta
+
+  public void addMovimento(Movimentacao mov) {
+    this.mov.add(mov);
+  }
+
+//set and get
+
+   public ArrayList<Movimentacao> getMov() {
+    return this.mov;
+  }
+
+  public void setMov(ArrayList<Movimentacao> mov) {
+    this.mov = mov;
+  }
+
+  public int getSaldo() {
+    return this.saldo;
+  }
+
+  public void setSaldo(int salod) {
+    this.saldo = saldo;
+  }
+
+  public double getLimCE() {
+    return this.limCE;
+  }
+
+  public void setLimCE(double lim) {
+    this.limCE = lim;
+  }
+
+  public boolean getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(boolean status) {
+    this.status = status;
+  }
+
+  public int getNum() {
+    return this.num;
+  }
+
+  public void setNum(int num) {
+    this.num = num;
+  }
+
+  public int getLimSaque() {
+    return this.limiteSaque;
+  }
+
+  public void setLimSaque(int lim) {
+    this.limiteSaque = lim;
+  }
+
+  public Agencia getAgencia() {
+    return this.ag;
+  }
+
+  public void setAgencia(Agencia ag) {
+    this.ag=ag;
+  }
+
+  public Cliente getCliente() {
+    return this.cliente;
+  }
+
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+public class ContaPoupanca extends Conta {
+
+  private int variacao;
+  private int rendimentoMensal;
+  private ArrayList<Movimentacao> mov;
+
+  public ContaPoupanca(int limiteSaldo, int num, int variacao, int rendimentoMensal, Agencia ag, Cliente client, ArrayList<Movimentacao> mov) {
+    super(limiteSaldo, num, ag, client);
+    this.variacao = variacao;
+    this.rendimentoMensal = rendimentoMensal;
+    this.mov = mov;
+  }
+
+//Add movimento novo
+
+  public void addMovimento(Movimentacao mov) {
+    this.mov.add(mov);
+  }
+
+//set and get
+
+  public int getNum() {
+    return this.num;
+  }
+
+  public void setNum(int num) {
+    this.num = num;
+  }
+
+  public int getLimSaque() {
+    return this.limiteSaque;
+  }
+
+  public void setLimSaque(int lim) {
+    this.limiteSaque = lim;
+  }
+
+  public Agencia getAgencia() {
+    return this.ag;
+  }
+
+  public void setAgencia(Agencia ag) {
+    this.ag = ag;
+  }
+
+  public Cliente getCliente() {
+    return this.cliente;
+  }
+
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+
+  public int getVariacao() {
+    return this.varicao;
+  }
+
+  public void setVariacao(int var) {
+    this.variacao = variacao;
+  }
+
+  public int getRendimento() {
+    return this.rendimentoMensal;
+  }
+
+  public void setRendimento(int r) {
+    this.rendimentoMensal = r;
+  }
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+public class Movimentacao {
+
+  private String descricao;
+  private int valor;
+  private char info;//deposito(d), saque(s), transferencia(t)
+
+  public Movimentacao(String descricao, int valor, char info) {
+    this.descricao = descricao;
+    this.valor = valor;
+    this.info = info;
+  }
+
+
+  private void setDescricao(String descricao) {
+    this.descricao = descricao;
+  }
+
+  private String getDescricao() {
+    return this.descricao;
+  }
+
+  private int getValor() {
+    return this.valor;
+  }
+
+  private void setValor(int valor) {
+    this.valor = valor;
+  }
+
+  private void setInfo(char info) {
+    this.info = info;
+  }
+
+  private char getInfo() {
+    return this.info;
+  }
+
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+// Um Banco que armazene um conjunto de Contas e forneça métodos que permitam que sejam feitas criações de conta, exclusão de contas, saques*, depósitos, emissão de saldo e extrato e transferência entre contas.
+
+
+
+import java.util.ArrayList;
+
+public class Banco {
+
+  private ArrayList<Agencia> agencias;
+  private ArrayList<Cliente> clientes;
+  private Arraylist<Conta> contas;
+
+  public Banco(ArrayList<Cliente> clientes, ArrayList<Conta> contas, ArrayList<Agencia> agencias) {
+    this.clintes = clientes;
+    this.agencias = agencias;
+    this.contas = contas;
+  }
+
+  public Banco(ArrayList<Cliente> clientes, ArrayList<Conta> contas) {
+    this.agencias = new ArrayList<Agencia>();
+    this.clientes = clientes;
+    this.contas = contas;
+  }
+
+
+//Metodos para operar contas e etc
+
+  public void criaContaCorrente(int limiteSaque, int num, int saldo, boolean status, double limCE, String nomeConta, Agencia ag, Cliente cliente) {
+    if(status==true){
+      this.contas.add(new ContaCorrente(limiteSaque, num, saldo, status, limCE, ag, cliente));
+    }else {
+      this.contas.add(new ContaCorrente(limiteSaque, num, saldo, status, ag, cliente));
+    }
+
+  public void criaContaPoupanca(int limiteSaldo, int num, int variacao, int rendimentoMensal, Agencia ag, Cliente cliente) {
+    boolean t = false;
+//Cria conta poupanca ligada a um cliente que ja tenha conta corrente
+
+    for(int i = 0; i<contas.size(); i++){
+      if(this.contas.get(i).num==num){
+        this.contas.add(new ContaPoupanca(this.contas(i).getLimSaldo(), num, variacao, rendimentoMensal, ag, cliente);
+        t = true;
+    }
+  }
+//Cria conta poupanca para cliente sem conta corrente
+    if (!t) {
+      this.contas.add(new ContaPoupanca(limiteSaldo, num, variacao, rendimentoMensal, ag, cliente));
+    }
+  }
+
+
+  private Agencia getAg(Conta conta) {
+    return conta.getAgencia();
+  }
+
+  private void setAg(Conta conta, Agencia ag) {
+    conta.setAgencia(ag);
+  }
+
+  private Cliente getCliente(Conta conta) {
+    return conta.getCliente();
+  }
+
+  private void setCliente(Conta conta, Cliente cliente) {
+    conta.setCliente(cliente);
+  }
+
+  public int getSaldo(Conta conta) {
+    return conta.getSaldo());
+  }
+
+  public void setSaldo(int saldo, Conta conta) {
+    conta.setSaldo(saldo);
+  }
+
+   private Movimentacao extrato(Conta conta) {
+    return conta.getMovimentacao();
+  }
+
+  private void excluiConta(Conta conta) {
+    this.contas.remove(conta);
+  }
+
+  private void saquePoupanca(ContaPoupanca conta, int valor) {
+    if (valor<=conta.saldo && valor<=conta.limiteSaque) {
+      conta.setSaldo(conta.getSaldo - valor);
+      conta.addMovimento(new Movimentacao("", valor, 's'));
+    }else {
+      System.out.println("Transacao Negada");
+    }
+  }
+
+  private void saqueCorrente(ContaCorrente conta, int valor) {
+    if(conta.getStatus()) {
+      if(valor<=conta.getSaldo && valor<=conta.getLimSaque() + conta.getLimCE()) {
+        conta.setSaldo(conta.getSaldo() - valor);
+        conta.addMovimento(new Movimentacao("", valor, 's'));
+      }else {
+        System.out.println("Transacao Negada");
+      }
+    }
+    else {
+      if(valor<=conta.getSaldo() && valor<=conta.getLimSaque()) {
+        conta.setSaldo(conta.getSaldo() - valor);
+        conta.addMovimento(new Movimentacao("", valor, 's'));
+      }else {
+        System.out.println("Transacao Negada");
+      }
+    }
+  }
+
+  private void deposit(Conta conta, int valor) {
+    conta.setSaldo(valor);
+    conta.addMovimento(new Movimentacao("", valor, 'd'));
+  }
+
+  private void transfere1para2(Conta conta1, Conta conta2, int valor) {
+    if(valor<=conta1.saldo){
+      conta1.setSaldo(conta1.getSaldo() - valor);
+      conta2.setSaldo(conta2.getSaldo() + valor);
+      String des = "Transferencia para " + conta2.num;
+      String des2 = "Transferencia de " + conta1.num;
+      conta1.addMovimento(new Movimentacao(des, valor, 't'));
+      conta2.addMovimento(new Movimentacao(des2, valor, 't'));
+    }else {
+      System.out.println("A conta nao possui saldo suficiente para efetuar transferencia");
+    }
+  }
+
+//set and get
+
+  public void setClientes(ArrayList<Cliente> clientes) {
+    this.clientes = clientes;
+  }
+
+  public ArrayList<Cliente> getCliente() {
+    return this.clientes;
+  }
+
+  public void setContas(ArrayList<Conta> contas) {
+    this.contas = contas;
+  }
+
+  public ArrayList<Conta> contas getContas() {
+    return this.contas;
+  }
+
+  public void setAgencias(ArrayList<Agencia> agencias) {
+    this.agencias = agencias;
+  }
+
+}
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+
+import java.util.ArrayList;
+
+public class Conta {
+  private int num;
+  private int limiteSaque;
+  private Agencia ag;
+  private Cliente cliente;
+  private ArrayList mov;
+
+  public Conta() {
+
+  }
+
+  public Conta(int limiteSaque, int num, Agencia ag, Cliente client) {
+    this.limiteSaque = limiteSaque;
+    this.num = num;
+    this.ag = ag;
+    this.cliente = cliente;
+    this.mov = new ArrayList<Movimentacao>();
+  }
+
+
+  public int getNum() {
+    return this.num;
+  }
+
+  public void setNum(int num) {
+    this.num = num;
+  }
+
+  public int limSaque() {
+    return this.limiteSaque;
+  }
+
+  public void setLimSaque(int lim) {
+    this.limiteSaque = lim;
+  }
+
+  public Agencia getAgencia() {
+    return this.ag;
+  }
+
+  public void setAgencia(Agencia ag) {
+    this.ag = ag;
+  }
+
+  public Cliente getCliente() {
+    return this.cliente;
+  }
+
+  public void setCliente(Cliente cliente) {
+    this.cliente = cliente;
+  }
+}
+
+///////////////////////////////////////////////////////////////////
+
+
+
+import java.util.ArrayList;
+
+public class Agencia extends Banco {
+  private String nome;
+  private int numero;
+  private String endereco;
+  private ArrayList<Cliente> clientes;
+  private ArrayList<Conta> contas;
+
+  public Agencia(String nome, int num, String endereco, ArrayList clientes, ArrayList contas) {
+    super(contas);
+    this.nome = nome;
+    this.num = num;
+    this.endereco = endereco;
+    this.clientes = clientes;
+  }
+
+
+  public String getNome() {
+    return this.nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public int getNum() {
+    return this.num;
+  }
+
+  public void setNum(int num) {
+    this.num = num;
+  }
+
+  public String getEndereco() {
+    return this.endereco;
+  }
+
+  public void setEndereco(String end) {
+    this.endereco = end;
+  }
+
+  public ArrayList<Cliente> getClientes() {
+    return this.clientes;
+  }
+
+  public void setClientes(ArrayList<Cliente> clientes) {
+    this.clientes = clientes ;
+  }
+
+  public ArryaList<Conta> getContas() {
+    return this.contas;
+  }
+
+  public void setContas(ArrayList<Conta> contas) {
+    this.contas = contas;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+import java.util.ArrayList;
+
+public class Cliente {
+
+  private String nome;
+  private String end;
+  private int tel;
+  private  String email;
+  private ArrayList<Conta> contas;
+
+
+  public Cliente(String nome, String end, int tel, String email, ArrayList<Conta> contas) {
+    this.nome = nome;
+    this.end = end;
+    this.tel = tel;
+    this.email = email;
+    this.contas = contas;
+  }
+
+//Get and Set
+
+  public String getNome() {
+    return this.nome;
+  }
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getEnd() {
+    return this.end;
+  }
+
+  public int getTel() {
+    return this.tel;
+  }
+
+  public void setTel(int tel) {
+    this.tel = tel;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void seEmail(String email) {
+    this.email = email;
+  }
+
+  public ArrayList<Conta> getContas() {
+    return this.contas;
+  }
+
+  public void setContas(ArrayList<Conta> contas) {
+    this.contas = contas;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Crie as classes PessoaFisica (CPF, estado civil) e PessoaJuridica (CNPJ), subclasses de Cliente.
+
+
+
+public class PessoaFisica extends Cliente {
+  private int cpf;
+  private char eC;
+
+  public PessoaFisica(int cpf, char estadoCivil, String nome, String end, int tel, String email, ArrayList contas) {
+    super(nome, end, tel, email, contas);
+    this.cpf = cpf;
+    this.eC = estadoCivil;
+  }
+  
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getNome() {
+    return this.nome;
+  }
+  
+  public void setEnd(String end) {
+    this.end = end;
+  }
+
+  public String getEnd() {
+    return this.end;
+  }
+
+  public void setTel(int tel) {
+    this.tel = tel;
+  }
+
+  public int getTel() {
+    return this.tel;
+  } 
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void setContas(ArrayList<Conta> contas) {
+    this.contas = contas;
+  }
+
+  public ArrayList<Conta> getContas() {
+    return this.contas;
+  }
+
+  public void setCpf(int cpf) {
+    this.cpf = cpf;
+  }
+
+  public int getCpf() {
+    return this.cpf;
+  }
+
+  public void setEc(char eC) {
+    this.eC = eC;
+  }
+  public char getEc(){
+    return this.eC;
+  }
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+public class PessoaJuridica extends Cliente {
+
+  private int cnpj;
+
+  public PessoaJuridica (int cnpj, String nome, String end, int tel, String email, ArrayList contas) {
+    super(nome, tel, end, tel, email, contas);
+    this.cnpj = cnpj;
+  }
+
+
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
+
+  public String getNome() {
+    return this.nome;
+  }
+  
+  public void setEnd(String end) {
+    this.end = end;
+  }
+
+  public String getEnd() {
+    return this.end;
+  }
+
+  public void setTel(int tel) {
+    this.tel = tel;
+  }
+
+  public int getTel() {
+    return this.tel;
+  }
+  
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getEmail() {
+    return this.email;
+  }
+
+  public void setContas(ArrayList<Conta> contas) {
+    this.contas = contas;
+  }
+
+  public ArrayList<Conta> getContas() {
+    return this.contas;
+  }
+
+  public void setCnpj(int cnpj) {
+    this.cnpj = cnpj;
+  }
+}
