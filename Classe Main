@@ -1,0 +1,101 @@
+import java.util.Scanner;
+public class Main {
+	public static void main(String[] args) {
+		Banco banco = new Banco();
+		Scanner input = new Scanner(System.in);
+		
+		System.out.println("-------Menu-------");
+		System.out.println("1-Criação de conta");
+		System.out.println("2-Exclusão de conta");
+		System.out.println("3-Saque na conta");
+		System.out.println("4-Depósito na conta");
+		System.out.println("5-Emissão de Saldo e Extrato");
+		System.out.println("6-Transferência entre contas");
+		System.out.println("7-Shutdown");
+		int menu = input.nextInt();
+		if(menu==1) {
+			System.out.println("Qual o limite de saque das contas?");
+			int limiteSaque = input.nextInt();
+			System.out.println("Deseja Criar uma Conta Poupanca ou Corrente?");
+			String escolha = input.next();
+			if(escolha == "Poupanca") {
+				System.out.println("");
+				System.out.println("Insira variacao:");
+				int var = input.nextInt();
+				System.out.println("Insira limite de saque: ");
+				int lim = input.nextInt();
+				System.out.println("Insira rendimento mensal: ");
+				int rend = input.nextInt();
+				//para mtd funcionar deve ser protected ou PUBLIC
+				banco.addConta(new ContaPoupanca(var, lim, rend));
+			}else {
+				System.out.println("Insira o numero da conta: ");
+				int num = input.nextInt();
+				System.out.println("Insira o status para cheque especial(true/false): ");
+				boolean status = input.nextBoolean();
+				System.out.println("Insira o limite de saque: ");
+				int limSaque = input.nextInt();
+	//Criar contrutor para Contas Corrente sem cheque especial!!				
+				if(status) {
+					System.out.println("Insira limite do cheque especial: ");
+					int limCE = input.nextInt();
+					banco.addConta(new ContaCorrente(num, status, limCE, limSaque));
+				}else {
+					banco.addConta(new ContaCorrente(num, status, limSaque));
+				}
+				
+			}
+		}else if(menu==2) {
+			System.out.println("Insira o numero da conta a ser excluida: ");
+			int numE = input.nextInt();
+			Conta contaE = banco.getConta(numE);
+			banco.getContas().remove(contaE);
+		//saque	
+		}else if(menu==3) {
+			System.out.println("Insira numero da conta: ");
+			int num = input.nextInt();
+			System.out.println("Conta corrente ou poupanca(c/p): ");
+			String tipo = input.next();
+			System.out.println("Insira o valor de saque: ");
+			int valor = input.nextInt();
+			Conta conta = banco.getConta(num);
+			if(tipo.equals("c")) {
+				//banco.saqueCorrente(int valor, Conta conta);
+			}else {
+				//banco.saquePoupanca(int valor, Conta conta);
+			}
+		//deposito
+		}else if(menu==4) {
+			System.out.println("Deseja depositar na corrente ou poupanca(c/p): ");
+			String tipo = input.next();
+			System.out.println("Insira numero da conta: ");
+			int num = input.nextInt();
+			System.out.println("Insira valor a depositar: ");
+			int valor  = input.nextInt();
+			if(tipo.equals("c")) {
+				Conta conta=banco.getConta(num);
+				//banco.depositoCorrente(conta, valor);
+			}else {
+				Conta conta = banco.getConta(num);
+				//banco.depositoPoupanca(conta, valor);
+			}
+		//emissao saldo e extrato
+		}else if(menu==5) {
+			System.out.println("Insira numero da conta: ");
+			int num = input.nextInt();
+			Conta conta = banco.getConta(num);
+			//banco.extrato(conta);
+			//banco.saldo(conta);
+		}else if(menu==6) {
+			System.out.println("Insira o numero da conta de saida: ");
+			int num1 = input.nextInt();
+			System.out.println("Insira o numero da conta receptora: ");
+			int num2 = input.nextInt();
+			System.out.println("Insira o valor a ser transferido: ");
+			int valor = input.nextInt();
+			Conta conta1 = banco.getConta(num1);
+			Conta conta2 = banco.getConta(num2);
+			//banco.transferencia1para2(conta1, conta2, valor);
+		}
+	}	
+}
